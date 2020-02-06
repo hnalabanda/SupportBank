@@ -4,8 +4,8 @@ namespace SupportBank
 {
     public class Individual
     {
-        private string name;
-        private DateTime dateOfBirth;
-        private char Gender;
+        public string name;
+        public DateTime dateOfBirth;
+        public char Gender;
     }
 }

@@ -1,17 +1,27 @@
 ﻿using System.Net.Mime;
+using System.Collections.Generic;
 
 namespace SupportBank
 {
     public class Account
     {
-        private Individual owner;
-        private double amtTheyOwed;
-        private double amtAreOwed;
-        private <List>Transaction transactions;
+        public string owner;
+        // public string name;
+        public double amtTheyOwe;
+        public double amtAreOwed;
+        public List<Transaction> transactions;
 
-        public AddTransaction(Transaction trans)
+        public Account()
         {
-            
+            this.amtAreOwed = 0;
+            this.amtTheyOwe = 0;
+            this.transactions=new List<Transaction>();
+          
+        }
+
+        public void AddTransaction(Transaction trans)
+        {
+            this.transactions.Add(trans);
         }
         public void Transfer(Transaction trans)
         {
