@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualBasic;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using System.IO;
 namespace SupportBank
 {
     public class Print
@@ -11,64 +15,77 @@ namespace SupportBank
             Console.WriteLine(@"Type All to output the names of each person, and the total amount they owe, or are owed.");
             Console.WriteLine(@"Type [Account Name] to print a list of every transaction, with the date and narrative, for that account with that name.");
             var readCommand=Strings.Trim(Console.ReadLine());
-            
-            if (readCommand == "All")
-            {
-                PrintAll(bank);
-            }
-            else
-            {
-                PrintAccount(readCommand,bank);
- 
-            }
-            
-         
-            
+            PdfPTable table;
+            table = readCommand == "All" ? PrintAll(bank) : PrintAccount(readCommand,bank);
+          
+            var fileContents= GeneratePDF(table);
+            File.WriteAllBytes(@"C:\Training\testreport.pdf", fileContents);
+       
         }
 
-        private void PrintAll(Bank bank)
+        private PdfPTable PrintAll(Bank bank)
         {
-            Console.Write("Name");
-            Console.Write("      ");
-            Console.Write("Are Owed");
-            Console.Write("      ");
-            Console.WriteLine("They Owe");
-            Console.WriteLine("=============================================================");
-            foreach (Account acc in bank.bankAccounts)
-            {
-                Console.Write(acc.owner);
-                Console.Write("      ");
-                Console.Write(acc.amtAreOwed);
-                Console.Write("      ");
-                Console.WriteLine(acc.amtTheyOwe);
-            }
+     
+           
+           PdfPTable table=new PdfPTable(3);
+           table.AddCell("Name");
+           table.AddCell("Are Owed");
+           table.AddCell("They Owe");
+
+           foreach (Account acc in bank.bankAccounts)
+           {
+               table.AddCell(acc.owner);
+               table.AddCell(Math.Round(acc.amtAreOwed,2).ToString());
+               table.AddCell(Math.Round(acc.amtTheyOwe,2).ToString());
+           }
+
+           return table;
+
         }
 
-        private void PrintAccount(string command,Bank bank)
+        private PdfPTable PrintAccount(string command,Bank bank)
         {
             var account = bank.GetAccount(command);
-            Console.Write("Date");
-            Console.Write("      ");
-            Console.Write("From");
-            Console.Write("      ");
-            Console.WriteLine("To");
-            Console.Write("      ");
-            Console.WriteLine("Narrative");
-            Console.Write("      ");
-            Console.WriteLine("Amount");                   
-            Console.WriteLine("=============================================================");
+            PdfPTable table=new PdfPTable(5);
+            table.AddCell("Date");
+            table.AddCell("From");
+            table.AddCell("To");
+            table.AddCell("Narrative");
+            table.AddCell("Amount");
+            
+         
             foreach (Transaction  transaction in account.transactions)
             {
-                Console.Write(transaction.transactionDate);
-                Console.Write("      ");
-                Console.Write(transaction.fromIndividual);
-                Console.Write("      ");
-                Console.WriteLine(transaction.toIndividual);
-                Console.Write("      ");
-                Console.WriteLine(transaction.narrative);
-                Console.Write("      ");
-                Console.WriteLine(transaction.amount);        
-            }           
+               
+                table.AddCell(transaction.transactionDate.ToString());
+                table.AddCell(transaction.fromIndividual);
+                table.AddCell(transaction.toIndividual);
+                table.AddCell(transaction.narrative);
+                table.AddCell(transaction.amount.ToString());
+            }  
+            return table;
+ 
         }
+        private byte[] GeneratePDF(PdfPTable table)
+        {
+            var memoryStream = new System.IO.MemoryStream();
+            Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+
+            PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+            document.Open();
+
+            Paragraph para = new Paragraph("Support Bank Report ");
+            document.Add(para);
+                
+              
+            document.Add(table);
+
+            document.Close();
+            byte[] bytes = memoryStream.ToArray();
+            memoryStream.Close();
+            return bytes;
+        }
+        
+        
     }
 }
