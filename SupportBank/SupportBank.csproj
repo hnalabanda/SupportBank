@@ -9,4 +9,9 @@
       <Compile Remove="Dog.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="iTextSharp" Version="5.5.13.1" />
+      <PackageReference Include="NLog" Version="4.6.8" />
+    </ItemGroup>
+
 </Project>
