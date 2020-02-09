@@ -34,7 +34,7 @@ namespace SupportBank
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error Occured, please check logs");
+                Console.WriteLine($"Error Occured{e.Message}, please check logs");
             }
 
         }
