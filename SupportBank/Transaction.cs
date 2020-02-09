@@ -4,9 +4,9 @@ namespace SupportBank
 {
     public class Transaction
     {
-        public DateTime transactionDate;
-        public string fromIndividual;
-        public string toIndividual;
+        public DateTime Date;
+        public string fromAccount;
+        public string toAccount;
         public string narrative;
         public double amount;
     }
