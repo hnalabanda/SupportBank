@@ -31,8 +31,8 @@ namespace SupportBank
         }
         public void TransferFunds(Transaction transaction)
         {
-            Account fromAccount = GetAccount(transaction.fromIndividual);
-            Account toAccount = GetAccount(transaction.toIndividual);
+            Account fromAccount = GetAccount(transaction.fromAccount);
+            Account toAccount = GetAccount(transaction.toAccount);
             fromAccount.amtAreOwed += transaction.amount;
             toAccount.amtTheyOwe += transaction.amount;
             fromAccount.AddTransaction(transaction);
@@ -44,7 +44,7 @@ namespace SupportBank
             foreach (Transaction transaction in transactions)
             {
            
-                var fromPerson=transaction.fromIndividual;
+                var fromPerson=transaction.fromAccount;
 
                 if (GetAccount(fromPerson)==null)
                 {
@@ -53,7 +53,7 @@ namespace SupportBank
                 }
 
                     
-                var toPerson=   transaction.toIndividual;
+                var toPerson=   transaction.toAccount;
                
                 if (GetAccount(toPerson)==null)
                 {
