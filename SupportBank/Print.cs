@@ -6,10 +6,12 @@ using Microsoft.VisualBasic;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.IO;
+using NLog;
 namespace SupportBank
 {
     public class Print
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         public void PrintReport(Bank bank)
         {
             Console.WriteLine(@"Type All to output the names of each person, and the total amount they owe, or are owed.");
@@ -25,7 +27,7 @@ namespace SupportBank
 
         private PdfPTable PrintAll(Bank bank)
         {
-     
+            Logger.Info("Print report");
            
            PdfPTable table=new PdfPTable(3);
            table.AddCell("Name");
@@ -57,9 +59,9 @@ namespace SupportBank
             foreach (Transaction  transaction in account.transactions)
             {
                
-                table.AddCell(transaction.transactionDate.ToString());
-                table.AddCell(transaction.fromIndividual);
-                table.AddCell(transaction.toIndividual);
+                table.AddCell(transaction.Date.ToString());
+                table.AddCell(transaction.fromAccount);
+                table.AddCell(transaction.toAccount);
                 table.AddCell(transaction.narrative);
                 table.AddCell(transaction.amount.ToString());
             }  
