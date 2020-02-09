@@ -7,10 +7,12 @@
 
     <ItemGroup>
       <Compile Remove="Dog.cs" />
+      <Compile Remove="FileImporter.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="iTextSharp" Version="5.5.13.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="NLog" Version="4.6.8" />
     </ItemGroup>
 
